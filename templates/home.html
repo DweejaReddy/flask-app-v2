@@ -8,7 +8,8 @@
   </head>
   <title>Careers Page</title>
 </head>
-<body class="container-fluid">
+<body>
+  {% include 'navbar.html' %}
   <div class=" text-center">
 <h1>{{company_name}} Careers</h1>
   <img src="static/linkedin_banner.jpeg" width="100%">
@@ -24,7 +25,9 @@
   </p>
 
   <div class="text-center my-4">
-  <button class="btn btn-success">Contact Us</button>
+  <a href="mailto:dweeja54@gmail.com?subject=Question%20about%20Job%20openings&body=Name%20%3A%20%3Cyour%20name%20here%3E%0D%0A%0D%0AQuery%20%3A%20%3Center%20your%20query%20here%3E" class="btn btn-success">Contact Us</a>
     </div>
+
+  {% include 'footer.html' %}
 </body>
 </html>

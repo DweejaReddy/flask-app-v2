@@ -19,6 +19,12 @@ JOBS = [
     'id':3,
     'title':'Data Scientist',
     'location':'Mumbai, India'
+  },
+  {
+    'id':4,
+    'title':'Marketing Manager',
+    'location':'Delhi, India',
+    'salary':'12,00,000'
   }
 ]
 @app.route("/")
