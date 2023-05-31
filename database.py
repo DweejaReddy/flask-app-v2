@@ -1,33 +1,48 @@
 from sqlalchemy import create_engine, text
 import os
-connection_string = os.environ['DB_CONNECTION_STRING']
-engine = create_engine(connection_string,
-                       connect_args={"ssl"      :{
-    "ssl_ca": "/etc/ssl/cert.pem"
-  }})
+
+db_connection_string = os.environ['DB_CONNECTION_STRING']
+
+engine = create_engine(
+  db_connection_string, 
+  connect_args={
+    "ssl": {
+      "ssl_ca": "/etc/ssl/cert.pem"
+    }
+  })
 
 
-def load_job_from_db():
+def load_jobs_from_db():
   with engine.connect() as conn:
     result = conn.execute(text("select * from jobs"))
     jobs = []
     for row in result.all():
       jobs.append(row)
-  return jobs
+    return jobs
 
-# with engine.connect() as conn:
-#   result = conn.execute(text("select * from jobs")
-#   result_dicts = []
-#   for row in result.all():
-#     result_dicts.append(row)
-#     print(row ,"\n")
+def load_job_from_db(id):
+  with engine.connect() as conn:
+    result = conn.execute(
+      text("SELECT * FROM jobs WHERE id = :val"),
+      {"val":id}
+    )
+    rows = result.all()
+    if len(rows) == 0:
+      return None
+    else:
+      return rows[0] 
 
 
-# result_all = result.all() 
-# print (type(result_all))
-# print (type(result_all[0]))
-# print(result_all)
-# # first_result = result_all[0]
-# # first_result_dict = (result_all[0].__dict__)
-# # print(type(first_result_dicṭ))
-# # print(first_result_dict)
+def add_application_to_db(job_ID, data):
+  with engine.connect() as conn:
+    query = text("INSERT INTO applications (job_id, full_name, email, linkedin_url, education, work_experience, resume_url) VALUES (:job_id, :full_name, :email, :linkedin_url, :education, :work_experience, :resume_url)")
+
+    conn.execute(query, 
+               {"job_id":job_ID, 
+                 "full_name":data['full_name'],
+                 "email":data['email'],
+                 "linkedin_url":data['linkedin_url'],
+                 "education":data['education'],
+                 "work_experience":data['work_experience'],
+                 "resume_url":data['resume_url']}
+                )
